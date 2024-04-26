@@ -24,12 +24,12 @@ public class TowerGame extends ApplicationAdapter {
 	public void render () {
 		World.getInstance().render();
 		Drawing.getInstance().renderUpdate();
-		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,0.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
-		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,200.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
-		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,-200.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+		Drawing.getInstance().drawTexture("wall", new Vector2(0.0f,0.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,200.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
+		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,-200.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
 
-		Drawing.getInstance().drawTexture("d", new Vector2(-200.0f,0.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
-		Drawing.getInstance().drawTexture("d", new Vector2(200.0f,0.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+		Drawing.getInstance().drawTexture("d", new Vector2(-200.0f,0.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
+		//Drawing.getInstance().drawTexture("d", new Vector2(200.0f,0.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
 
 
 		// kill app if escape is pressed

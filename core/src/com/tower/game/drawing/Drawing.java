@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -52,7 +53,7 @@ public class Drawing {
         viewports.put(WorldViewportType.GAME.index, new WorldViewport(gameViewport));
 
         // hud left viewport
-        FillViewport hudLeftViewport = new FillViewport(MIN_HUD_WIDTH,0);
+        FillViewport hudLeftViewport = new FillViewport(WORLD_WIDTH,WORLD_HEIGHT);
         hudLeftViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
         hudLeftViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
         viewports.put(WorldViewportType.HUD_LEFT.index, new WorldViewport(hudLeftViewport));
@@ -94,9 +95,8 @@ public class Drawing {
     }
 
     private void renderViewPort(WorldViewport viewport){
-        viewport.getViewport().apply();
         spriteBatch.setProjectionMatrix(viewport.getViewport().getCamera().combined);
-        System.out.println(viewport.getDrawingQueue().get(DrawingLayers.WALLS).size());
+        viewport.getViewport().apply();
         for (HashMap<Integer, ArrayList<RenderData>> layer : viewport.getDrawingQueue().values()){
             for (ArrayList<RenderData> row : layer.values()){
                 for (RenderData data : row){
@@ -195,6 +195,7 @@ public class Drawing {
         gameViewport.update(width, height);
 
         Viewport leftViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
+        System.out.println("size :" + gameViewport.getLeftGutterWidth() + ", " + height);
         leftViewport.update(gameViewport.getLeftGutterWidth(), height);
         leftViewport.setScreenPosition(0,0);
 
