@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.tower.game.utils.Utils;
 
 import java.io.File;
@@ -29,7 +27,7 @@ public class Drawing {
     private final HashMap<Integer, WorldViewport> viewports;
     private final int WORLD_WIDTH = 320;
     private final int WORLD_HEIGHT = 320;
-    private final int MIN_HUD_WIDTH = 0;
+    private final int MAX_HUD_WIDTH = 96;
 
     private Color backgroundColor = new Color(0.13333f,0.101960784f, 0.098039216f, 1.0f);
 
@@ -53,13 +51,15 @@ public class Drawing {
         viewports.put(WorldViewportType.GAME.index, new WorldViewport(gameViewport));
 
         // hud left viewport
-        FillViewport hudLeftViewport = new FillViewport(WORLD_WIDTH,WORLD_HEIGHT);
+        Viewport hudLeftViewport = new FillViewport(WORLD_WIDTH,WORLD_HEIGHT);
         hudLeftViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
         hudLeftViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
         viewports.put(WorldViewportType.HUD_LEFT.index, new WorldViewport(hudLeftViewport));
 
         // hud right
-        FitViewport hudRightViewport = new FitViewport(MIN_HUD_WIDTH,0);
+        Viewport hudRightViewport = new FillViewport(WORLD_WIDTH,WORLD_HEIGHT);
+        hudRightViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
+        hudRightViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
         viewports.put(WorldViewportType.HUD_RIGHT.index, new WorldViewport(hudRightViewport));
     }
     private void loadTextures(){
@@ -181,11 +181,12 @@ public class Drawing {
      * Simplified version of drawTexture, draws to specified viewport
      * @param textureName name of texture
      * @param position in world position
+     * @param direction how should sprite be flipped
      * @param layer layer to draw on
      * @param type viewport to draw to
      */
-    public void drawTexture(String textureName, Vector2 position, DrawingLayers layer, WorldViewportType type){
-        drawTexture(textureName, position, FlipDirection.NONE, 0.0f, 1.0f, WHITE, layer, DEFAULT_PRIORITY, type);
+    public void drawTexture(String textureName, Vector2 position, FlipDirection direction, DrawingLayers layer, WorldViewportType type){
+        drawTexture(textureName, position, direction, 0.0f, 1.0f, WHITE, layer, DEFAULT_PRIORITY, type);
 
     }
 
@@ -195,13 +196,14 @@ public class Drawing {
         gameViewport.update(width, height);
 
         Viewport leftViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
-        System.out.println("size :" + gameViewport.getLeftGutterWidth() + ", " + height);
         leftViewport.update(gameViewport.getLeftGutterWidth(), height);
-        leftViewport.setScreenPosition(0,0);
+        // fuck this bullshit fr fr
+        leftViewport.setScreenPosition(gameViewport.getLeftGutterWidth() - (gameViewport.getScreenWidth() / 20),0);
 
-        //Viewport rightViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
-        //rightViewport.update(gameViewport.getRightGutterWidth(), height);
-        //rightViewport.setScreenPosition(gameViewport.getRightGutterX(), 0);
+
+        Viewport rightViewport = viewports.get(WorldViewportType.HUD_RIGHT.index).getViewport();
+        rightViewport.update(gameViewport.getRightGutterWidth(), height);
+        rightViewport.setScreenPosition(gameViewport.getRightGutterX(), 0);
 
     }
 }

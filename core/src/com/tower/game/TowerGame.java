@@ -3,10 +3,8 @@ package com.tower.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
-import com.tower.game.drawing.DrawingLayers;
-import com.tower.game.drawing.WorldViewportType;
+import com.tower.game.ui.hud.Hud;
 import com.tower.game.world.World;
 
 public class TowerGame extends ApplicationAdapter {
@@ -17,6 +15,7 @@ public class TowerGame extends ApplicationAdapter {
 		// init singletons
 		Drawing.getInstance();
 		World.getInstance();
+		Hud.getInstance();
 
 	}
 
@@ -24,12 +23,7 @@ public class TowerGame extends ApplicationAdapter {
 	public void render () {
 		World.getInstance().render();
 		Drawing.getInstance().renderUpdate();
-		Drawing.getInstance().drawTexture("wall", new Vector2(0.0f,0.0f), DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
-		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,200.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
-		Drawing.getInstance().drawTexture("d", new Vector2(0.0f,-200.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
-
-		Drawing.getInstance().drawTexture("d", new Vector2(-200.0f,0.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
-		//Drawing.getInstance().drawTexture("d", new Vector2(200.0f,0.0f), DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
+		Hud.getInstance().update();
 
 
 		// kill app if escape is pressed
