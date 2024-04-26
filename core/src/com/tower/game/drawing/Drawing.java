@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tower.game.utils.Utils;
-import jdk.internal.classfile.impl.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,21 +25,42 @@ public class Drawing {
     // rendering variables
     private final SpriteBatch spriteBatch;
     private final HashMap<String, Texture> textureMap;
-    private final HashMap<DrawingLayers, HashMap<Integer, ArrayList<RenderData>>> drawingQueue;
+    private final HashMap<Integer, WorldViewport> viewports;
+    private final int WORLD_WIDTH = 320;
+    private final int WORLD_HEIGHT = 320;
+    private final int MIN_HUD_WIDTH = 0;
 
+    private Color backgroundColor = new Color(0.13333f,0.101960784f, 0.098039216f, 1.0f);
 
-
-    private Color backgroundColor = new Color(0.090196078f,0.105882353f,0.101960784f,1.0f);
 
 
     public Drawing(){
         spriteBatch = new SpriteBatch();
         textureMap = new HashMap<>();
-        drawingQueue = new HashMap<>();
         loadTextures();
+        viewports = new HashMap<>();
+        initViewPorts();
         setupDrawingQueue();
+
     }
 
+    private void initViewPorts(){
+        // game view port
+        FitViewport gameViewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT);
+        gameViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
+        gameViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
+        viewports.put(WorldViewportType.GAME.index, new WorldViewport(gameViewport));
+
+        // hud left viewport
+        FillViewport hudLeftViewport = new FillViewport(MIN_HUD_WIDTH,0);
+        hudLeftViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
+        hudLeftViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
+        viewports.put(WorldViewportType.HUD_LEFT.index, new WorldViewport(hudLeftViewport));
+
+        // hud right
+        FitViewport hudRightViewport = new FitViewport(MIN_HUD_WIDTH,0);
+        viewports.put(WorldViewportType.HUD_RIGHT.index, new WorldViewport(hudRightViewport));
+    }
     private void loadTextures(){
         ArrayList<File> textureFiles = Utils.getAllFilesInFolder("./assets/sprites");
         for(File f : textureFiles){
@@ -46,8 +69,8 @@ public class Drawing {
     }
 
     private void setupDrawingQueue(){
-        for (DrawingLayers layer : DrawingLayers.values()){
-            drawingQueue.put(layer, new HashMap<>());
+        for (WorldViewport port : viewports.values()){
+            port.setupDrawingQueue();
         }
     }
 
@@ -56,11 +79,25 @@ public class Drawing {
      * Redraws drawing queue, should be called every frame
      */
     public void renderUpdate(){
+
         spriteBatch.begin();
-
         ScreenUtils.clear(backgroundColor);
+        // scuffed garbage, done to ensure that viewports are draw in the correct order
+        for (int type : viewports.keySet()){
+            renderViewPort(viewports.get(type));
+        }
 
-        for (HashMap<Integer, ArrayList<RenderData>> layer : drawingQueue.values()){
+        // experimental garbage collector call
+        System.gc();
+
+        spriteBatch.end();
+    }
+
+    private void renderViewPort(WorldViewport viewport){
+        viewport.getViewport().apply();
+        spriteBatch.setProjectionMatrix(viewport.getViewport().getCamera().combined);
+        System.out.println(viewport.getDrawingQueue().get(DrawingLayers.WALLS).size());
+        for (HashMap<Integer, ArrayList<RenderData>> layer : viewport.getDrawingQueue().values()){
             for (ArrayList<RenderData> row : layer.values()){
                 for (RenderData data : row){
                     renderRenderData(data);
@@ -68,10 +105,6 @@ public class Drawing {
                 row.clear();
             }
         }
-        // experimental garbage collector call
-        System.gc();
-
-        spriteBatch.end();
     }
 
     /**
@@ -109,6 +142,7 @@ public class Drawing {
         this.backgroundColor = backgroundColor;
     }
 
+    private final WorldViewportType DEFAULT_VIEWPORT = WorldViewportType.GAME;
     /**
      * Draws a texture
      * will be drawn over if not called next frame
@@ -120,10 +154,10 @@ public class Drawing {
      * @param color texture tint (1.0, 1.0, 1.0, 1.0 = no tint)
      * @param layer on which layer should texture be drawn
      * @param priority higher priority textures draw over lower priority ones if on the same layer
+     * @param viewportType to which viewport should sprite be drawn (default = game)
      */
-    public void drawTexture(String textureName, Vector2 position, FlipDirection flip, float rotation, float scale, Color color, DrawingLayers layer, int priority){
-
-        HashMap<Integer, ArrayList<RenderData>> layerQueue = drawingQueue.get(layer);
+    public void drawTexture(String textureName, Vector2 position, FlipDirection flip, float rotation, float scale, Color color, DrawingLayers layer, int priority, WorldViewportType viewportType){
+        HashMap<Integer, ArrayList<RenderData>> layerQueue = viewports.get(viewportType.index).getDrawingQueue().get(layer);
         if (!layerQueue.containsKey(priority)){
             layerQueue.put(priority, new ArrayList<>());
         }
@@ -132,7 +166,41 @@ public class Drawing {
     }
     private final Color WHITE = new Color(1, 1, 1, 1);
     private final int DEFAULT_PRIORITY = 0;
+
+    /**
+     * Simplified version of drawTexture, draws to game
+     * @param textureName name of texture
+     * @param position in world position
+     * @param layers layer to draw on
+     */
     public void drawTexture(String textureName, Vector2 position, DrawingLayers layers){
-        drawTexture(textureName, position, FlipDirection.NONE, 0.0f, 1.0f, WHITE, layers, DEFAULT_PRIORITY);
+        drawTexture(textureName, position, FlipDirection.NONE, 0.0f, 1.0f, WHITE, layers, DEFAULT_PRIORITY, DEFAULT_VIEWPORT);
+    }
+
+    /**
+     * Simplified version of drawTexture, draws to specified viewport
+     * @param textureName name of texture
+     * @param position in world position
+     * @param layer layer to draw on
+     * @param type viewport to draw to
+     */
+    public void drawTexture(String textureName, Vector2 position, DrawingLayers layer, WorldViewportType type){
+        drawTexture(textureName, position, FlipDirection.NONE, 0.0f, 1.0f, WHITE, layer, DEFAULT_PRIORITY, type);
+
+    }
+
+    public void resize(int width, int height) {
+        // shitty hardcoded logic
+        Viewport gameViewport = viewports.get(WorldViewportType.GAME.index).getViewport();
+        gameViewport.update(width, height);
+
+        Viewport leftViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
+        leftViewport.update(gameViewport.getLeftGutterWidth(), height);
+        leftViewport.setScreenPosition(0,0);
+
+        //Viewport rightViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
+        //rightViewport.update(gameViewport.getRightGutterWidth(), height);
+        //rightViewport.setScreenPosition(gameViewport.getRightGutterX(), 0);
+
     }
 }
