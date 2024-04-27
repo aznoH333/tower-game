@@ -13,9 +13,16 @@ public class RoomTileset {
         tileSprites = new HashMap<>();
         switch (type){
             case GREEN_DEFAULT:
-                tileSprites.put(WorldTile.FLOOR, "floor");
-                tileSprites.put(WorldTile.WALL, "wall");
+                tileSprites.put(WorldTile.FLOOR, "green_dungeon_tiles_3");
+                loadGenericTileset("green_dungeon_tiles_", 4);
                 break;
+        }
+    }
+
+    private void loadGenericTileset(String name, int startIndex){
+        for (int i = 0; i < 8; i++){
+            // TODO : corner tiles
+            tileSprites.put(WorldTile.values()[i + 2], name + (startIndex + i));
         }
     }
 

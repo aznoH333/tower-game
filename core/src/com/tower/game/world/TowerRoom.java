@@ -15,7 +15,7 @@ public class TowerRoom {
         for (int i = 0; i < TILES_IN_ROOM; i++){
             for (int j = 0; j < TILES_IN_ROOM; j++){
                 if (i == 0 || j == 0 || i == 19 || j == 19){
-                    tiles[i][j] = WorldTile.WALL;
+                    tiles[i][j] = WorldTile.WALL_UP;
                 }else {
                     tiles[i][j] = WorldTile.FLOOR;
                 }
@@ -33,7 +33,12 @@ public class TowerRoom {
     }
 
     private void drawTile(int x, int y, float cameraOffsetX, float cameraOffsetY, Drawing drawing){
-        DrawingLayers layer = tiles[x][y].isWall ? DrawingLayers.WALLS : DrawingLayers.FLOOR;
-        drawing.drawTexture(tileset.getSpriteForTile(tiles[x][y]), new Vector2(x * TILE_SIZE - cameraOffsetX, y * TILE_SIZE - cameraOffsetY), layer);
+        WorldTile tile = tiles[x][y];
+        if (tile == WorldTile.NONE){
+            return;
+        }
+
+        DrawingLayers layer = tile.isWall ? DrawingLayers.WALLS : DrawingLayers.FLOOR;
+        drawing.drawTexture(tileset.getSpriteForTile(tiles[x][y]), new Vector2(x * TILE_SIZE - cameraOffsetX + tile.xOffset, y * TILE_SIZE - cameraOffsetY + tile.yOffset), layer);
     }
 }
