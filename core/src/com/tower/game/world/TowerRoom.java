@@ -15,7 +15,7 @@ public class TowerRoom {
         for (int i = 0; i < TILES_IN_ROOM; i++){
             for (int j = 0; j < TILES_IN_ROOM; j++){
                 if (i == 0 || j == 0 || i == 19 || j == 19){
-                    tiles[i][j] = WorldTile.WALL_UP;
+                    tiles[i][j] = WorldTile.WALL_DOWN;
                 }else {
                     tiles[i][j] = WorldTile.FLOOR;
                 }
