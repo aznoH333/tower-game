@@ -1,6 +1,7 @@
 package com.tower.game.world;
 
 import com.tower.game.utils.DebugUtils;
+import com.tower.game.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -8,6 +9,7 @@ public class RoomContents {
     public static final int TILES_IN_ROOM = 20;
     public static final int TILE_SIZE = 16;
     public final WorldTile[][] tiles = new WorldTile[TILES_IN_ROOM][TILES_IN_ROOM];
+    public final int[][] tileRandomization = new int[TILES_IN_ROOM][TILES_IN_ROOM];
 
     public RoomContents(ArrayList<ArrayList<String>> csv){
         try {
@@ -15,6 +17,11 @@ public class RoomContents {
                 for (int y = 0; y < TILES_IN_ROOM; y++){
                     // weird axis shenanigans to make array math the csv file contents
                     tiles[x][y] = convertCsvValueToWorldTile(csv.get(TILES_IN_ROOM - y - 1).get(x));
+
+                    final int MIN_RANDOM = 0;
+                    final int MAX_RANDOM = 9;
+                    // tile randomization
+                    tileRandomization[x][y] = Utils.getRandomInRange(MIN_RANDOM, MAX_RANDOM);
                 }
             }
         }catch (Exception e){
@@ -24,17 +31,8 @@ public class RoomContents {
     }
 
     private WorldTile convertCsvValueToWorldTile(String value){
-        char firstChar = value.charAt(0);
+        int val = Integer.parseInt(value);
 
-        switch (firstChar) {
-            case '0':
-                return WorldTile.NONE;
-            case '1':
-                return WorldTile.WALL_UP;
-            default:
-                DebugUtils.fatalCrash("Unexpected char found when loading level : " + firstChar);
-                return null;
-
-        }
+        return WorldTile.values()[val];
     }
 }

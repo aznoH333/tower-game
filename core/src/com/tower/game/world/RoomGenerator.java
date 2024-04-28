@@ -48,7 +48,6 @@ public class RoomGenerator {
 
     public TowerRoom getRoom(FloorLevel level, RoomArchetype archetype){
         ArrayList<RoomContents> possibleLayout = levelLayoutMap.get(level).get(archetype);
-        DebugUtils.debugMessage("" + possibleLayout.size(), false);
         return new TowerRoom(possibleLayout.get(Utils.getRandomInRange(0, possibleLayout.size() - 1)));
     }
 

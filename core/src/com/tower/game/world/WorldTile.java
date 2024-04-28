@@ -1,26 +1,40 @@
 package com.tower.game.world;
 
 public enum WorldTile {
-    NONE(false, 0, 0),
-    FLOOR(false, 0, 0),
-    WALL_DOWN(true, 0,0),
-    WALL_RIGHT_DOWN(true, 0, 0),
-    WALL_RIGHT(true, 0, 0),
-    WALL_RIGHT_UP(true, 0, 6),
-    WALL_UP(true, 0, 6),
-    WALL_LEFT_UP(true,-6 ,6),
-    WALL_LEFT(true, -6, 0),
-    WALL_LEFT_DOWN(true,-6,0);
+    NONE(true),
+    FLOOR(false),
+    WALL_U(true),
+    WALL_R(true),
+    WALL_D(true),
+    WALL_L(true),
+    WALL_RU(true),
+    WALL_RD(true),
+    WALL_LD(true),
+    WALL_LU(true),
+    WALL_RU_C(true),
+    WALL_RD_C(true),
+    WALL_LD_C(true),
+    WALL_LU_C(true),
+    DECORATION_U(true),
+    DECORATION_R(true),
+    DECORATION_D(true),
+    DECORATION_L(true),
+    DECORATION_RU(true),
+    DECORATION_RD(true),
+    DECORATION_LD(true),
+    DECORATION_LU(true),
+    DECORATION_RU_C(true),
+    DECORATION_RD_C(true),
+    DECORATION_LD_C(true),
+    DECORATION_LU_C(true);
+
 
 
 
     public final boolean isWall;
-    public final int xOffset;
-    public final int yOffset;
 
-    WorldTile(boolean isWall, int xOffset, int yOffset){
+    WorldTile(boolean isWall){
         this.isWall = isWall;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
+
     }
 }

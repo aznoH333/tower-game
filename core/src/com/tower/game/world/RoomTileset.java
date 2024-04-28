@@ -1,28 +1,34 @@
 package com.tower.game.world;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomTileset {
-    private HashMap<WorldTile, String> tileSprites;
+    private HashMap<WorldTile, TileVariations> tileSprites;
 
-    public String getSpriteForTile(WorldTile tile){
-        return tileSprites.get(tile);
+    public String getSpriteForTile(WorldTile tile, int tileRandomness){
+        return tileSprites.get(tile).getSprite(tileRandomness);
     }
 
     public RoomTileset(TilesetType type){
         tileSprites = new HashMap<>();
         switch (type){
             case GREEN_DEFAULT:
-                tileSprites.put(WorldTile.FLOOR, "green_dungeon_tiles_3");
+                TileVariations temp = new TileVariations("green_dungeon_tiles_1");
+                temp.addSprite("green_dungeon_tiles_2");
+                temp.addSprite("green_dungeon_tiles_3");
+
+
+                tileSprites.put(WorldTile.FLOOR, temp);
+                tileSprites.put(WorldTile.NONE, new TileVariations("green_dungeon_tiles_28"));
                 loadGenericTileset("green_dungeon_tiles_", 4);
                 break;
         }
     }
 
     private void loadGenericTileset(String name, int startIndex){
-        for (int i = 0; i < 8; i++){
-            // TODO : corner tiles
-            tileSprites.put(WorldTile.values()[i + 2], name + (startIndex + i));
+        for (int i = 0; i < 24; i++){
+            tileSprites.put(WorldTile.values()[i + 2], new TileVariations(name + (startIndex + i)));
         }
     }
 

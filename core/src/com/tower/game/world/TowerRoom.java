@@ -23,11 +23,8 @@ public class TowerRoom {
 
     private void drawTile(int x, int y, float cameraOffsetX, float cameraOffsetY, Drawing drawing){
         WorldTile tile = roomContents.tiles[x][y];
-        if (tile == WorldTile.NONE){
-            return;
-        }
 
         DrawingLayers layer = tile.isWall ? DrawingLayers.WALLS : DrawingLayers.FLOOR;
-        drawing.drawTexture(tileset.getSpriteForTile(tile), new Vector2(x * RoomContents.TILE_SIZE - cameraOffsetX + tile.xOffset, y * RoomContents.TILE_SIZE - cameraOffsetY + tile.yOffset), layer);
+        drawing.drawTexture(tileset.getSpriteForTile(tile, roomContents.tileRandomization[x][y]), new Vector2(x * RoomContents.TILE_SIZE - cameraOffsetX, y * RoomContents.TILE_SIZE - cameraOffsetY), layer);
     }
 }
