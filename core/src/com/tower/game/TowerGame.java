@@ -8,6 +8,7 @@ import com.tower.game.ui.hud.Hud;
 import com.tower.game.utils.DebugInfoLevel;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.FileWrapper;
+import com.tower.game.utils.Utils;
 import com.tower.game.world.World;
 
 import java.io.File;
@@ -21,14 +22,6 @@ public class TowerGame extends ApplicationAdapter {
 		Drawing.getInstance();
 		World.getInstance();
 		Hud.getInstance();
-
-		FileWrapper fw = new FileWrapper(new File("./gamedata/testfile.txt"));
-		for (String s : fw.getContents()){
-			DebugUtils.log(s, DebugInfoLevel.INFO);
-		}
-
-		fw.getContents().set(0, "amogus");
-		fw.saveFile();
 	}
 
 	@Override

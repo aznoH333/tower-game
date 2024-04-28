@@ -14,9 +14,9 @@ public class TowerFloor {
         rooms = new HashMap<>();
         currentCoordinates = new FloorCoordinates(0,0);
 
-        rooms.put(new FloorCoordinates(0, 0), new TowerRoom());
-        rooms.put(new FloorCoordinates(0, 1), new TowerRoom());
-        rooms.put(new FloorCoordinates(0, 2), new TowerRoom());
+        rooms.put(new FloorCoordinates(0, 0), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(0, 1), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(0, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
     }
 
     public TowerRoom getCurrentRoom(){
