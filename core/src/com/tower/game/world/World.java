@@ -13,5 +13,9 @@ public class World {
         currentFloor.render();
     }
 
+    public TowerFloor getCurrentFloor(){
+        return currentFloor;
+    }
+
 
 }

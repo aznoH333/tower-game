@@ -30,7 +30,20 @@ public class TowerGame extends ApplicationAdapter {
 		Drawing.getInstance().renderUpdate();
 		Hud.getInstance().update();
 
-
+		// temporary input
+		if (Gdx.input.isKeyJustPressed(Input.Keys.S)){
+			World.getInstance().getCurrentFloor().moveCoordinatesBy(0, -1);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.W)){
+			World.getInstance().getCurrentFloor().moveCoordinatesBy(0, +1);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.A)){
+			World.getInstance().getCurrentFloor().moveCoordinatesBy(-1, 0);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.D)){
+			World.getInstance().getCurrentFloor().moveCoordinatesBy(1, 0);
+		}
+		DebugUtils.checkFps();
 		// kill app if escape is pressed
 		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
 			Gdx.app.exit();

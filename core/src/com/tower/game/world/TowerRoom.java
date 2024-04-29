@@ -8,6 +8,10 @@ public class TowerRoom {
     private RoomContents roomContents;
     private final RoomTileset tileset = new RoomTileset(TilesetType.GREEN_DEFAULT);
 
+    public RoomTileset getTileset() {
+        return tileset;
+    }
+
     public TowerRoom(RoomContents roomContents){
         this.roomContents = roomContents;
     }
