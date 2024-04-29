@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "3.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "1.tmx": {
@@ -27,9 +28,13 @@
             "scale": 2.68078125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 160.0279769190418,
-                "y": 160.21448971265372
+                "x": 159.65495133181793,
+                "y": 158.53587457014632
             }
+        },
+        "generic_tileset.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
         }
     },
     "last.exportedFilePath": "/mnt/disk1/Dev/java/tower-game/assets/tiled",
@@ -40,10 +45,17 @@
     "map.tileWidth": 16,
     "map.width": 20,
     "openFiles": [
+        "generic_tileset.tsx",
+        "1.tmx",
+        "3.tmx",
+        "2.tmx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
-        "2.tmx"
+        "generic_tileset.tsx",
+        "1.tmx",
+        "2.tmx",
+        "3.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

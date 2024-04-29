@@ -1,12 +1,16 @@
 package com.tower.game.drawing;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.*;
+import com.tower.game.utils.DebugUtils;
+import com.tower.game.utils.FileWrapper;
 import com.tower.game.utils.Utils;
 
 import java.io.File;
@@ -28,7 +32,7 @@ public class Drawing {
     private final int WORLD_WIDTH = 304;
     private final int WORLD_HEIGHT = 304;
     private final int MAX_HUD_WIDTH = 96;
-
+    private ShaderProgram ambientShader;
     private Color backgroundColor = new Color(0.13333f,0.101960784f, 0.098039216f, 1.0f);
 
 
@@ -40,6 +44,7 @@ public class Drawing {
         viewports = new HashMap<>();
         initViewPorts();
         setupDrawingQueue();
+        initShaders();
 
     }
 
@@ -62,6 +67,14 @@ public class Drawing {
         hudRightViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
         viewports.put(WorldViewportType.HUD_RIGHT.index, new WorldViewport(hudRightViewport));
     }
+
+    private void initShaders(){
+        ambientShader = new ShaderProgram(new FileHandle("./assets/gamedata/shaders/default.glsl"), new FileHandle("./assets/gamedata/shaders/ambientColor.fs"));
+        if (ambientShader.isCompiled()){
+            return;
+        }
+        DebugUtils.fatalCrash("Shader compilation failed : " + ambientShader.getLog());
+    }
     private void loadTextures(){
         ArrayList<File> textureFiles = Utils.getAllFilesInFolder("./assets/sprites");
         for(File f : textureFiles){
@@ -80,8 +93,8 @@ public class Drawing {
      * Redraws drawing queue, should be called every frame
      */
     public void renderUpdate(){
-
         spriteBatch.begin();
+        spriteBatch.setShader(ambientShader);
         ScreenUtils.clear(backgroundColor);
         // scuffed garbage, done to ensure that viewports are draw in the correct order
         for (int type : viewports.keySet()){
@@ -115,6 +128,7 @@ public class Drawing {
         for (Texture t : textureMap.values()){
             t.dispose();
         }
+        ambientShader.dispose();
     }
 
     private void renderRenderData(RenderData data){
@@ -199,7 +213,6 @@ public class Drawing {
         leftViewport.update(gameViewport.getLeftGutterWidth(), height);
         // fuck this bullshit fr fr
         leftViewport.setScreenPosition(gameViewport.getLeftGutterWidth() - (gameViewport.getScreenWidth() / 20),0);
-
 
         Viewport rightViewport = viewports.get(WorldViewportType.HUD_RIGHT.index).getViewport();
         rightViewport.update(gameViewport.getRightGutterWidth(), height);
