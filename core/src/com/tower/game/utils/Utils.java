@@ -37,11 +37,11 @@ public class Utils {
         return fileName.substring(0, fileName.indexOf('.'));
     }
 
-    public static ArrayList<ArrayList<String>> parseCsv(ArrayList<String> fileContents){
+    public static ArrayList<ArrayList<String>> parseCsv(ArrayList<String> fileContents, String separator){
         ArrayList<ArrayList<String>> output = new ArrayList<>();
 
         for (String line : fileContents){
-            ArrayList<String> temp = new ArrayList<>(Arrays.asList(line.split(";")));
+            ArrayList<String> temp = new ArrayList<>(Arrays.asList(line.split(separator)));
             output.add(temp);
         }
 

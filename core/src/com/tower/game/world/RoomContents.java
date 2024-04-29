@@ -6,7 +6,7 @@ import com.tower.game.utils.Utils;
 import java.util.ArrayList;
 
 public class RoomContents {
-    public static final int TILES_IN_ROOM = 20;
+    public static final int TILES_IN_ROOM = 19;
     public static final int TILE_SIZE = 16;
     public final WorldTile[][] tiles = new WorldTile[TILES_IN_ROOM][TILES_IN_ROOM];
     public final int[][] tileRandomization = new int[TILES_IN_ROOM][TILES_IN_ROOM];
@@ -31,7 +31,7 @@ public class RoomContents {
     }
 
     private WorldTile convertCsvValueToWorldTile(String value){
-        int val = Integer.parseInt(value);
+        int val = Integer.parseInt(value) + 1;
 
         return WorldTile.values()[val];
     }

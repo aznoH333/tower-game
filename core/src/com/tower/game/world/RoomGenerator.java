@@ -42,7 +42,7 @@ public class RoomGenerator {
         ArrayList<FileWrapper> loadedFiles = Utils.getAllFilesInFolderWrapped("./assets/gamedata/floorLayoutData/" + level.layoutFileFolderName + "/" + archetype.layoutFolderName);
 
         for (FileWrapper wrapper : loadedFiles){
-            target.add(new RoomContents(Utils.parseCsv(wrapper.getContents())));
+            target.add(new RoomContents(Utils.parseCsv(wrapper.getContents(), ",")));
         }
     }
 

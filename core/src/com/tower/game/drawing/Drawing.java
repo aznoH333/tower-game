@@ -25,8 +25,8 @@ public class Drawing {
     private final SpriteBatch spriteBatch;
     private final HashMap<String, Texture> textureMap;
     private final HashMap<Integer, WorldViewport> viewports;
-    private final int WORLD_WIDTH = 320;
-    private final int WORLD_HEIGHT = 320;
+    private final int WORLD_WIDTH = 304;
+    private final int WORLD_HEIGHT = 304;
     private final int MAX_HUD_WIDTH = 96;
 
     private Color backgroundColor = new Color(0.13333f,0.101960784f, 0.098039216f, 1.0f);
