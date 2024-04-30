@@ -71,6 +71,9 @@ public class Drawing {
     private void initShaders(){
         ambientShader = new ShaderProgram(new FileHandle("./assets/gamedata/shaders/default.glsl"), new FileHandle("./assets/gamedata/shaders/ambientColor.fs"));
         if (ambientShader.isCompiled()){
+            spriteBatch.setShader(ambientShader);
+            ambientShader.bind();
+
             return;
         }
         DebugUtils.fatalCrash("Shader compilation failed : " + ambientShader.getLog());
@@ -94,7 +97,9 @@ public class Drawing {
      */
     public void renderUpdate(){
         spriteBatch.begin();
-        spriteBatch.setShader(ambientShader);
+
+
+
         ScreenUtils.clear(backgroundColor);
         // scuffed garbage, done to ensure that viewports are draw in the correct order
         for (int type : viewports.keySet()){
@@ -218,5 +223,10 @@ public class Drawing {
         rightViewport.update(gameViewport.getRightGutterWidth(), height);
         rightViewport.setScreenPosition(gameViewport.getRightGutterX(), 0);
 
+        // update shader values
+
+
+        ambientShader.setUniformf("u_windowWidth", width);
+        ambientShader.setUniformf("u_windowHeight", height);
     }
 }
