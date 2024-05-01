@@ -1,5 +1,6 @@
 package com.tower.game.drawing;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,9 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.*;
+import com.tower.game.ui.hud.Hud;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.FileWrapper;
 import com.tower.game.utils.Utils;
+import com.tower.game.world.RoomContents;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -217,7 +220,9 @@ public class Drawing {
         Viewport leftViewport = viewports.get(WorldViewportType.HUD_LEFT.index).getViewport();
         leftViewport.update(gameViewport.getLeftGutterWidth(), height);
         // fuck this bullshit fr fr
-        leftViewport.setScreenPosition(gameViewport.getLeftGutterWidth() - (gameViewport.getScreenWidth() / 20),0);
+        leftViewport.setScreenPosition(0,0);
+        Hud.getInstance().setGutterWidth(gameViewport.getLeftGutterWidth() * (leftViewport.getWorldHeight() / (float)Gdx.graphics.getHeight()));
+
 
         Viewport rightViewport = viewports.get(WorldViewportType.HUD_RIGHT.index).getViewport();
         rightViewport.update(gameViewport.getRightGutterWidth(), height);

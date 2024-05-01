@@ -17,7 +17,7 @@ float lerp(float start, float end, float value){
 void main() {
         vec2 screenCenter = vec2(u_windowWidth / 2.0, u_windowHeight / 2.0);
         float screenScalingFactor = 320.0 / u_windowHeight;
-        float lightScale = 300.0;
+        float lightScale = 800.0;
 
 
         vec3 color = texture2D(u_texture, v_texCoords).rgb;

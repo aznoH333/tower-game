@@ -1,22 +1,23 @@
 package com.tower.game.world;
 
+import com.badlogic.gdx.Game;
 import com.tower.game.utils.DebugUtils;
+import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.Utils;
 
 import java.util.ArrayList;
 
 public class RoomContents {
-    public static final int TILES_IN_ROOM = 19;
-    public static final int TILE_SIZE = 16;
-    public final WorldTile[][] tiles = new WorldTile[TILES_IN_ROOM][TILES_IN_ROOM];
-    public final int[][] tileRandomization = new int[TILES_IN_ROOM][TILES_IN_ROOM];
+
+    public final WorldTile[][] tiles = new WorldTile[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
+    public final int[][] tileRandomization = new int[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
 
     public RoomContents(ArrayList<ArrayList<String>> csv){
         try {
-            for (int x = 0; x < TILES_IN_ROOM; x++){
-                for (int y = 0; y < TILES_IN_ROOM; y++){
+            for (int x = 0; x < GameConstants.TILES_IN_ROOM; x++){
+                for (int y = 0; y < GameConstants.TILES_IN_ROOM; y++){
                     // weird axis shenanigans to make array math the csv file contents
-                    tiles[x][y] = convertCsvValueToWorldTile(csv.get(TILES_IN_ROOM - y - 1).get(x));
+                    tiles[x][y] = convertCsvValueToWorldTile(csv.get(GameConstants.TILES_IN_ROOM - y - 1).get(x));
 
                     final int MIN_RANDOM = 0;
                     final int MAX_RANDOM = 9;

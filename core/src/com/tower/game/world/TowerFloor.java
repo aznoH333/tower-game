@@ -1,10 +1,12 @@
 package com.tower.game.world;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
 import com.tower.game.utils.DebugUtils;
+import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
 
@@ -79,7 +81,7 @@ public class TowerFloor {
         float yOffset = 0;
 
         if (!transitionTimer.isReady()){
-            final int ROOM_SIZE = RoomContents.TILE_SIZE * RoomContents.TILES_IN_ROOM;
+            final int ROOM_SIZE = GameConstants.TILE_SIZE * GameConstants.TILES_IN_ROOM;
             // transition is happening
             xOffset = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionX * ROOM_SIZE * 2;
             yOffset = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionY * ROOM_SIZE * 2;
@@ -101,9 +103,9 @@ public class TowerFloor {
     private void drawFakeBackground(float xOffset, float yOffset){
         Drawing d = Drawing.getInstance();
         RoomTileset currentTileset = getCurrentRoom().getTileset();
-        for (int x = 0; x < RoomContents.TILES_IN_ROOM; x++){
-            for (int y = 0; y < RoomContents.TILES_IN_ROOM; y++){
-                d.drawTexture(currentTileset.getSpriteForTile(WorldTile.NONE, 0), new Vector2(x * RoomContents.TILE_SIZE - xOffset, y * RoomContents.TILE_SIZE - yOffset), DrawingLayers.WALLS);
+        for (int x = 0; x < GameConstants.TILES_IN_ROOM; x++){
+            for (int y = 0; y < GameConstants.TILES_IN_ROOM; y++){
+                d.drawTexture(currentTileset.getSpriteForTile(WorldTile.NONE, 0), new Vector2(x * GameConstants.TILE_SIZE - xOffset, y * GameConstants.TILE_SIZE - yOffset), DrawingLayers.WALLS);
             }
         }
     }
