@@ -28,7 +28,6 @@ public class TowerRoom {
 
     private void drawTile(int x, int y, float cameraOffsetX, float cameraOffsetY, Drawing drawing){
         WorldTile tile = roomContents.tiles[x][y];
-
         DrawingLayers layer = tile.isWall ? DrawingLayers.WALLS : DrawingLayers.FLOOR;
         drawing.drawTexture(tileset.getSpriteForTile(tile, roomContents.tileRandomization[x][y]), new Vector2(x * GameConstants.TILE_SIZE - cameraOffsetX, y * GameConstants.TILE_SIZE - cameraOffsetY), layer);
     }

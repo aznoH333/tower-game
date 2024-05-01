@@ -1,5 +1,6 @@
 package com.tower.game.ui.hud;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
@@ -30,7 +31,13 @@ public class Hud {
 
 
         for (int i = 0; i < 20; i++){
-            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth, i * 16), FlipDirection.VERTICAL, DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
+            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth, i * 16), FlipDirection.VERTICAL, DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+        }
+
+        for (int i = 0; i < Math.ceil(gutterWidth / GameConstants.TILE_SIZE); i++){
+            for (int j = 0; j < GameConstants.TILES_IN_ROOM; j++){
+                drawing.drawTexture("side_bar_2", new Vector2(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE), FlipDirection.NONE, DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
+            }
         }
     }
 
@@ -38,7 +45,14 @@ public class Hud {
         Drawing drawing = Drawing.getInstance();
 
         for (int i = 0; i < GameConstants.TILES_IN_ROOM; i++){
-            drawing.drawTexture("side_bar_1", new Vector2(0, i * 16), FlipDirection.NONE, DrawingLayers.FLOOR, WorldViewportType.HUD_RIGHT);
+            drawing.drawTexture("side_bar_1", new Vector2(0, i * GameConstants.TILE_SIZE), FlipDirection.NONE, DrawingLayers.FLOOR, WorldViewportType.HUD_RIGHT);
+        }
+
+        // draw rest of tiles
+        for (int i = 1; i < Math.ceil(gutterWidth / GameConstants.TILE_SIZE); i++){
+            for (int j = 0; j < GameConstants.TILES_IN_ROOM; j++){
+                drawing.drawTexture("side_bar_2", new Vector2(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE), FlipDirection.NONE, DrawingLayers.FLOOR, WorldViewportType.HUD_RIGHT);
+            }
         }
     }
     private float gutterWidth = 0;
