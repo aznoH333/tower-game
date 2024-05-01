@@ -1,10 +1,7 @@
 package com.tower.game.world;
 
-import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.FileWrapper;
 import com.tower.game.utils.Utils;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +14,7 @@ public class RoomGenerator {
         return instance;
     }
 
-    private HashMap<FloorLevel, HashMap<RoomArchetype, ArrayList<RoomContents>>> levelLayoutMap;
+    private final HashMap<FloorLevel, HashMap<RoomArchetype, ArrayList<RoomContents>>> levelLayoutMap;
     public RoomGenerator(){
         // load rooms
         levelLayoutMap = new HashMap<>();
@@ -48,7 +45,7 @@ public class RoomGenerator {
 
     public TowerRoom getRoom(FloorLevel level, RoomArchetype archetype){
         ArrayList<RoomContents> possibleLayout = levelLayoutMap.get(level).get(archetype);
-        return new TowerRoom(possibleLayout.get(Utils.getRandomInRange(0, possibleLayout.size() - 1)));
+        return new TowerRoom(possibleLayout.get(Utils.getRandomInRange(0, possibleLayout.size() - 1)), RoomArchetype.NORMAL);
     }
 
 }

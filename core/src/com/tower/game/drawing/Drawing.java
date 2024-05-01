@@ -7,14 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.*;
 import com.tower.game.ui.hud.Hud;
 import com.tower.game.utils.DebugUtils;
-import com.tower.game.utils.FileWrapper;
+import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.Utils;
-import com.tower.game.world.RoomContents;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,6 +67,14 @@ public class Drawing {
         hudRightViewport.getCamera().position.x = (float) WORLD_WIDTH / 2;
         hudRightViewport.getCamera().position.y = (float) WORLD_HEIGHT / 2;
         viewports.put(WorldViewportType.HUD_RIGHT.index, new WorldViewport(hudRightViewport));
+
+        // minimap
+        Viewport minimapViewport = new FillViewport(34, 34);
+        minimapViewport.getCamera().position.x = GameConstants.TILE_SIZE;
+        minimapViewport.getCamera().position.y = GameConstants.TILE_SIZE;
+        viewports.put(WorldViewportType.HUD_MINIMAP.index, new WorldViewport(minimapViewport));
+
+
     }
 
     private void initShaders(){
@@ -140,6 +146,10 @@ public class Drawing {
     }
 
     private void renderRenderData(RenderData data){
+        if (!textureMap.containsKey(data.getTextureName())){
+            DebugUtils.fatalCrash("Texture named \"" + data.getTextureName() + "\" not found");
+        }
+
         spriteBatch.setColor(data.getColor());
         Texture t = textureMap.get(data.getTextureName());
         spriteBatch.draw(
@@ -221,16 +231,20 @@ public class Drawing {
         leftViewport.update(gameViewport.getLeftGutterWidth(), height);
         // fuck this bullshit fr fr
         leftViewport.setScreenPosition(0,0);
-        Hud.getInstance().setGutterWidth(gameViewport.getLeftGutterWidth() * (leftViewport.getWorldHeight() / (float)Gdx.graphics.getHeight()));
+        float elementScalingFactor = (leftViewport.getWorldHeight() / (float)Gdx.graphics.getHeight());
+        Hud.getInstance().setGutterWidth(gameViewport.getLeftGutterWidth() * elementScalingFactor);
 
 
         Viewport rightViewport = viewports.get(WorldViewportType.HUD_RIGHT.index).getViewport();
         rightViewport.update(gameViewport.getRightGutterWidth(), height);
         rightViewport.setScreenPosition(gameViewport.getRightGutterX(), 0);
 
+        // set minimap values
+        Viewport minimapViewport = viewports.get(WorldViewportType.HUD_MINIMAP.index).getViewport();
+        minimapViewport.update((int)(36.0f / elementScalingFactor), (int)(36.0f / elementScalingFactor));
+        minimapViewport.setScreenPosition(rightViewport.getScreenX() + 18, 18);
+
         // update shader values
-
-
         ambientShader.setUniformf("u_windowWidth", width);
         ambientShader.setUniformf("u_windowHeight", height);
     }

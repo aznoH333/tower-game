@@ -28,7 +28,7 @@ public class FloorCoordinates {
         if (o == null || getClass() != o.getClass())
             return false;
         FloorCoordinates that = (FloorCoordinates) o;
-        return hashCode == that.hashCode;
+        return this.hashCode == that.hashCode;
     }
 
     @Override

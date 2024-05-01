@@ -1,6 +1,5 @@
 package com.tower.game.world;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
@@ -17,7 +16,7 @@ public class TowerFloor {
     private FloorCoordinates currentCoordinates;
     private FloorCoordinates targetCoordinates;
     private Color backgroundColor = new Color(0.090196078f,0.105882353f,0.101960784f,1.0f);
-    private UniversalTimer transitionTimer = new UniversalTimer(80);
+    private final UniversalTimer transitionTimer = new UniversalTimer(80);
     private int transitionX;
     private int transitionY;
 
@@ -30,6 +29,12 @@ public class TowerFloor {
         rooms.put(new FloorCoordinates(0, 1), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(0, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(1, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(2, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(3, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(4, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(5, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        enteredRoom();
+
 
     }
 
@@ -91,6 +96,7 @@ public class TowerFloor {
                 currentCoordinates = targetCoordinates;
                 xOffset -= ROOM_SIZE * transitionX * 2;
                 yOffset -= ROOM_SIZE * transitionY * 2;
+                enteredRoom();
             }
         }
 
@@ -107,6 +113,28 @@ public class TowerFloor {
             for (int y = 0; y < GameConstants.TILES_IN_ROOM; y++){
                 d.drawTexture(currentTileset.getSpriteForTile(WorldTile.NONE, 0), new Vector2(x * GameConstants.TILE_SIZE - xOffset, y * GameConstants.TILE_SIZE - yOffset), DrawingLayers.WALLS);
             }
+        }
+    }
+
+    public HashMap<FloorCoordinates, TowerRoom> getRooms() {
+        return rooms;
+    }
+
+    private void enteredRoom(){
+        rooms.get(currentCoordinates).markAsEntered();
+
+        // mark nearby as discovered
+        markAsDiscovered(-1,0);
+        markAsDiscovered(1,0);
+        markAsDiscovered(0,1);
+        markAsDiscovered(0,-1);
+
+    }
+
+    private void markAsDiscovered(int x, int y){
+        FloorCoordinates target = new FloorCoordinates(currentCoordinates.getX() + x, currentCoordinates.getY() + y);
+        if (rooms.containsKey(target)){
+            rooms.get(target).markAsDiscovered();
         }
     }
 }
