@@ -20,7 +20,7 @@ void main() {
         float lightScale = 800.0;
 
 
-        vec3 color = texture2D(u_texture, v_texCoords).rgb;
+        vec4 color = texture2D(u_texture, v_texCoords).rgba;
 
 
         int posX = int(gl_FragCoord.x);
@@ -37,6 +37,6 @@ void main() {
 
 
 
-        gl_FragColor = vec4(color, 1.0);
+        gl_FragColor = color;
 }
 

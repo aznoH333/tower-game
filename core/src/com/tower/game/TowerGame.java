@@ -4,14 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.tower.game.drawing.Drawing;
+import com.tower.game.objects.world.WorldObjectManager;
 import com.tower.game.ui.hud.Hud;
-import com.tower.game.utils.DebugInfoLevel;
 import com.tower.game.utils.DebugUtils;
-import com.tower.game.utils.FileWrapper;
-import com.tower.game.utils.Utils;
 import com.tower.game.world.World;
-
-import java.io.File;
 
 public class TowerGame extends ApplicationAdapter {
 
@@ -26,6 +22,7 @@ public class TowerGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		WorldObjectManager.getInstance().update();
 		World.getInstance().render();
 		Drawing.getInstance().renderUpdate();
 		Hud.getInstance().update();

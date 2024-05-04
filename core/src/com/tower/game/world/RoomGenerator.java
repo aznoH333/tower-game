@@ -3,6 +3,8 @@ package com.tower.game.world;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.FileWrapper;
 import com.tower.game.utils.Utils;
+import com.tower.game.world.enums.FloorLevel;
+import com.tower.game.world.enums.RoomArchetype;
 
 import java.util.ArrayList;
 import java.util.HashMap;

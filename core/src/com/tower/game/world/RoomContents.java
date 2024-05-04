@@ -2,6 +2,7 @@ package com.tower.game.world;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.Utils;
+import com.tower.game.world.enums.WorldTile;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class RoomContents {
 
     public final WorldTile[][] tiles = new WorldTile[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
     public final int[][] tileRandomization = new int[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
-
+    public final int[][] entities = new int[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
     public RoomContents(ArrayList<ArrayList<String>> csv, ArrayList<ArrayList<String>> entityCsv){
         try {
             for (int x = 0; x < GameConstants.TILES_IN_ROOM; x++){
@@ -21,6 +22,7 @@ public class RoomContents {
                     final int MAX_RANDOM = 9;
                     // tile randomization
                     tileRandomization[x][y] = Utils.getRandomInRange(MIN_RANDOM, MAX_RANDOM);
+                    entities[x][y] = Integer.parseInt(entityCsv.get(GameConstants.TILES_IN_ROOM - y - 1).get(x));
                 }
             }
         }catch (Exception e){

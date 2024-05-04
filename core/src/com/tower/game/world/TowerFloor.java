@@ -4,10 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
+import com.tower.game.objects.world.WorldObjectManager;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
+import com.tower.game.world.enums.FloorLevel;
+import com.tower.game.world.enums.RoomArchetype;
+import com.tower.game.world.enums.WorldTile;
 
 import java.util.HashMap;
 
@@ -19,6 +23,10 @@ public class TowerFloor {
     private final UniversalTimer transitionTimer = new UniversalTimer(80);
     private int transitionX;
     private int transitionY;
+    private float cameraOffsetX = 0.0f;
+    private float cameraOffsetY = 0.0f;
+    private float fakeBackgroundX = 0.0f;
+    private float fakeBackgroundY = 0.0f;
 
     public TowerFloor(){
         // temporary floor generation
@@ -79,31 +87,35 @@ public class TowerFloor {
     }
 
     public void render(){
+        rooms.get(currentCoordinates).renderRoom(cameraOffsetX, cameraOffsetY);
 
         // transition
         transitionTimer.progress();
-        float xOffset = 0;
-        float yOffset = 0;
 
         if (!transitionTimer.isReady()){
-            final int ROOM_SIZE = GameConstants.TILE_SIZE * GameConstants.TILES_IN_ROOM;
+            drawFakeBackground(fakeBackgroundX - GameConstants.ROOM_SIZE * transitionX, fakeBackgroundY - GameConstants.ROOM_SIZE * transitionY);
+
             // transition is happening
-            xOffset = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionX * ROOM_SIZE * 2;
-            yOffset = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionY * ROOM_SIZE * 2;
-            drawFakeBackground(xOffset - ROOM_SIZE * transitionX, yOffset - ROOM_SIZE * transitionY);
+            cameraOffsetX = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionX * GameConstants.ROOM_SIZE * 2;
+            cameraOffsetY = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionY * GameConstants.ROOM_SIZE * 2;
+            fakeBackgroundX = cameraOffsetX;
+            fakeBackgroundY = cameraOffsetY;
 
             if (transitionTimer.getAsPercentage() >= 0.5){
                 currentCoordinates = targetCoordinates;
-                xOffset -= ROOM_SIZE * transitionX * 2;
-                yOffset -= ROOM_SIZE * transitionY * 2;
+                cameraOffsetX -= GameConstants.ROOM_SIZE * transitionX * 2;
+                cameraOffsetY -= GameConstants.ROOM_SIZE * transitionY * 2;
                 enteredRoom();
             }
         }
 
+    }
+    public float getCameraOffsetX() {
+        return cameraOffsetX;
+    }
 
-
-        rooms.get(currentCoordinates).renderRoom(xOffset, yOffset);
-
+    public float getCameraOffsetY() {
+        return cameraOffsetY;
     }
 
     private void drawFakeBackground(float xOffset, float yOffset){
@@ -121,6 +133,15 @@ public class TowerFloor {
     }
 
     private void enteredRoom(){
+        TowerRoom currentRoom = rooms.get(currentCoordinates);
+
+        WorldObjectManager w = WorldObjectManager.getInstance();
+        w.clearObjects();
+        // add objects from room
+        currentRoom.spawnEntities();
+
+        w.onRoomEntry(!rooms.get(currentCoordinates).isEntered());
+
         rooms.get(currentCoordinates).markAsEntered();
 
         // mark nearby as discovered

@@ -1,10 +1,12 @@
 package com.tower.game.world;
 
-import java.util.ArrayList;
+import com.tower.game.world.enums.TilesetType;
+import com.tower.game.world.enums.WorldTile;
+
 import java.util.HashMap;
 
 public class RoomTileset {
-    private HashMap<WorldTile, TileVariations> tileSprites;
+    private final HashMap<WorldTile, TileVariations> tileSprites;
 
     public String getSpriteForTile(WorldTile tile, int tileRandomness){
         return tileSprites.get(tile).getSprite(tileRandomness);

@@ -1,4 +1,6 @@
-package com.tower.game.world;
+package com.tower.game.world.enums;
+
+import com.tower.game.world.RoomTileset;
 
 public enum FloorLevel {
     FLOOR_1("floor_1",new RoomTileset(TilesetType.GREEN_DEFAULT));

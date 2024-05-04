@@ -1,4 +1,4 @@
-package com.tower.game.world;
+package com.tower.game.world.enums;
 
 public enum RoomArchetype {
     NORMAL("normal", "minimap_markers_1");
