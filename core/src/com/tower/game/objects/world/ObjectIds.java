@@ -4,5 +4,7 @@ public enum ObjectIds {
     DOOR_UP,
     DOOR_RIGHT,
     DOOR_DOWN,
-    DOOR_LEFT;
+    DOOR_LEFT,
+
+    GENERIC_ENEMY_SPAWN;
 }

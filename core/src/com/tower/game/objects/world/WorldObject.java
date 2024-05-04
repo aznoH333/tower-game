@@ -24,4 +24,13 @@ public abstract class WorldObject {
     public int getY() {
         return y;
     }
+
+    /**
+     * Should be used to determine whether object should spawn.
+     * example: doors cant spawn if they lead to no room
+     * enemy spawners have a random chance to not exist
+     * @return true = yes, false = no
+     */
+    public abstract boolean canExist();
+
 }

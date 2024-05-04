@@ -5,6 +5,7 @@ import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
 import com.tower.game.objects.entites.Entity;
 import com.tower.game.objects.world.WorldObject;
+import com.tower.game.world.World;
 import com.tower.game.world.enums.WorldDirection;
 
 public class Door extends WorldObject {
@@ -44,5 +45,10 @@ public class Door extends WorldObject {
     @Override
     public void onFirstRoomEntry() {
 
+    }
+
+    @Override
+    public boolean canExist() {
+        return World.getInstance().getCurrentFloor().checkIfRoomExists(direction.x, direction.y);
     }
 }

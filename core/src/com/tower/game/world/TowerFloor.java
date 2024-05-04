@@ -27,6 +27,8 @@ public class TowerFloor {
     private float cameraOffsetY = 0.0f;
     private float fakeBackgroundX = 0.0f;
     private float fakeBackgroundY = 0.0f;
+    private boolean repeatedRoomEntryFlag = false;
+    private boolean hasBeenInitialized = false;
 
     public TowerFloor(){
         // temporary floor generation
@@ -35,19 +37,22 @@ public class TowerFloor {
 
         rooms.put(new FloorCoordinates(0, 0), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(0, 1), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
+        rooms.put(new FloorCoordinates(-1, 1), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(0, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(1, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(2, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(3, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(4, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
         rooms.put(new FloorCoordinates(5, 2), RoomGenerator.getInstance().getRoom(FloorLevel.FLOOR_1, RoomArchetype.NORMAL));
-        enteredRoom();
-
-
     }
 
     public TowerRoom getCurrentRoom(){
         return rooms.get(currentCoordinates);
+    }
+
+    public void init(){
+        hasBeenInitialized = true;
+        enteredRoom();
     }
 
     public FloorCoordinates getCurrentCoordinates(){
@@ -87,6 +92,9 @@ public class TowerFloor {
     }
 
     public void render(){
+        if (!hasBeenInitialized){
+            DebugUtils.fatalCrash("Tower floor needs to be initialized first");
+        }
         rooms.get(currentCoordinates).renderRoom(cameraOffsetX, cameraOffsetY);
 
         // transition
@@ -107,6 +115,8 @@ public class TowerFloor {
                 cameraOffsetY -= GameConstants.ROOM_SIZE * transitionY * 2;
                 enteredRoom();
             }
+        }else {
+            repeatedRoomEntryFlag = false;
         }
 
     }
@@ -131,8 +141,12 @@ public class TowerFloor {
     public HashMap<FloorCoordinates, TowerRoom> getRooms() {
         return rooms;
     }
-
     private void enteredRoom(){
+        if (repeatedRoomEntryFlag){
+            return;
+        }
+        repeatedRoomEntryFlag = true;
+
         TowerRoom currentRoom = rooms.get(currentCoordinates);
 
         WorldObjectManager w = WorldObjectManager.getInstance();
@@ -157,5 +171,15 @@ public class TowerFloor {
         if (rooms.containsKey(target)){
             rooms.get(target).markAsDiscovered();
         }
+    }
+
+    /**
+     * Checks if room exists (based on current floor coordinates)
+     * @param x coordinate
+     * @param y coordinate
+     * @return does room exist at (currentX + x, currentY + y)
+     */
+    public boolean checkIfRoomExists(int x, int y){
+        return rooms.containsKey(new FloorCoordinates(currentCoordinates.getX() + x, currentCoordinates.getY() + y));
     }
 }

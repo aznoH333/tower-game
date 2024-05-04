@@ -18,6 +18,7 @@ public class TowerGame extends ApplicationAdapter {
 		Drawing.getInstance();
 		World.getInstance();
 		Hud.getInstance();
+		World.getInstance().getCurrentFloor().init();
 	}
 
 	@Override

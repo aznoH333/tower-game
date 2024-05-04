@@ -9,27 +9,27 @@
     ],
     "fileStates": {
         "1.tmx": {
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 169,
-                "y": 122.25
+                "x": 164.99999999999997,
+                "y": 162.49999999999997
             }
         },
         "2.tmx": {
-            "scale": 2.68078125,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 159.65495133181793,
-                "y": 159.84146412542987
+                "x": 120.33333333333331,
+                "y": 152.16666666666669
             }
         },
         "3.tmx": {
             "scale": 2.68078125,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 159.65495133181793,
-                "y": 158.53587457014632
+                "x": 178.67925628023548,
+                "y": 160.96054088710147
             }
         },
         "generic_tileset.tsx": {

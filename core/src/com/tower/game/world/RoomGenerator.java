@@ -45,15 +45,13 @@ public class RoomGenerator {
 
         // create collection
         for (FileWrapper wrapper : loadedFiles){
-            //target.add(new RoomContents(Utils.parseCsv(wrapper.getContents(), ",")));
-            String targetName = wrapper.getFileName().substring(0, wrapper.getFileName().lastIndexOf("_") - 1);
-
+            String targetName = wrapper.getFileName().substring(0, wrapper.getFileName().lastIndexOf("_"));
             if (!temp.containsKey(targetName)){
                 temp.put(targetName, new LevelGenerationFileCollection());
             }
-            if (wrapper.getFileName().endsWith("tiles")){
+            if (wrapper.getFileName().endsWith("tiles.csv")){
                 temp.get(targetName).layoutFile = wrapper;
-            }else if (wrapper.getFileName().endsWith("objects")){
+            }else if (wrapper.getFileName().endsWith("objects.csv")){
                 temp.get(targetName).entityFile = wrapper;
             }
         }

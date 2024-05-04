@@ -47,6 +47,6 @@ public class FileWrapper {
     }
 
     public String getFileName(){
-        return baseFile.getName().replaceFirst("[.][^.]+$", "");
+        return baseFile.getName();
     }
 }

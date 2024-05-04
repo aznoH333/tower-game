@@ -22,7 +22,9 @@ public class WorldObjectManager {
     }
 
     public void addObject(WorldObject object){
-        worldObjects.add(object);
+        if (object.canExist()){
+            worldObjects.add(object);
+        }
     }
 
     public void onRoomEntry(boolean firstEntry){
@@ -50,6 +52,7 @@ public class WorldObjectManager {
             case DOOR_DOWN:     addObject(new Door(x, y, WorldDirection.DOWN)); return;
             case DOOR_LEFT:     addObject(new Door(x, y, WorldDirection.LEFT)); return;
             case DOOR_RIGHT:    addObject(new Door(x, y, WorldDirection.RIGHT)); return;
+            case GENERIC_ENEMY_SPAWN: DebugUtils.warn("Warning enemy spawners not implemented! \n x = " + x + ", y = " + y);return;
         }
         DebugUtils.fatalCrash("Unknown object id : " + id);
     }
