@@ -25,6 +25,10 @@ public class DebugUtils {
         log(message, DebugInfoLevel.DEBUG, allowDuplicates);
     }
 
+    public static void debugMessage(String message){
+        log(message, DebugInfoLevel.DEBUG, false);
+    }
+
     public static void warn(String message){
         log(message, DebugInfoLevel.WARNING, true);
     }

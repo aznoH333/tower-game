@@ -31,7 +31,7 @@ public class Hud {
 
 
         for (int i = 0; i < 20; i++){
-            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth, i * 16), FlipDirection.VERTICAL, DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth, i * GameConstants.TILE_SIZE), FlipDirection.VERTICAL, DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
         }
 
         for (int i = 0; i < Math.ceil(gutterWidth / GameConstants.TILE_SIZE); i++){

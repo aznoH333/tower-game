@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileWrapper {
-    private File baseFile;
+    private final File baseFile;
     private ArrayList<String> contents;
     public FileWrapper(File baseFile){
         this.baseFile = baseFile;
@@ -46,5 +46,7 @@ public class FileWrapper {
         }
     }
 
-
+    public String getFileName(){
+        return baseFile.getName().replaceFirst("[.][^.]+$", "");
+    }
 }

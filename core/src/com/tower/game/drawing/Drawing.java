@@ -78,7 +78,7 @@ public class Drawing {
     }
 
     private void initShaders(){
-        ambientShader = new ShaderProgram(new FileHandle("./assets/gamedata/shaders/default.glsl"), new FileHandle("./assets/gamedata/shaders/ambientColor.fs"));
+        ambientShader = new ShaderProgram(new FileHandle("./assets/shaders/default.glsl"), new FileHandle("./assets/shaders/ambientColor.fs"));
         if (ambientShader.isCompiled()){
             spriteBatch.setShader(ambientShader);
             ambientShader.bind();

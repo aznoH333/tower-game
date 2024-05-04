@@ -1,6 +1,4 @@
 package com.tower.game.world;
-
-import com.badlogic.gdx.Game;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.Utils;
@@ -12,7 +10,7 @@ public class RoomContents {
     public final WorldTile[][] tiles = new WorldTile[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
     public final int[][] tileRandomization = new int[GameConstants.TILES_IN_ROOM][GameConstants.TILES_IN_ROOM];
 
-    public RoomContents(ArrayList<ArrayList<String>> csv){
+    public RoomContents(ArrayList<ArrayList<String>> csv, ArrayList<ArrayList<String>> entityCsv){
         try {
             for (int x = 0; x < GameConstants.TILES_IN_ROOM; x++){
                 for (int y = 0; y < GameConstants.TILES_IN_ROOM; y++){

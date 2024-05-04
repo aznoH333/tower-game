@@ -1,7 +1,9 @@
 package com.tower.game.world;
 
+import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.FileWrapper;
 import com.tower.game.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -37,15 +39,50 @@ public class RoomGenerator {
     private void loadRoomsForArchetype(FloorLevel level, RoomArchetype archetype){
         ArrayList<RoomContents> target = levelLayoutMap.get(level).get(archetype);
         ArrayList<FileWrapper> loadedFiles = Utils.getAllFilesInFolderWrapped("./assets/gamedata/floorLayoutData/" + level.layoutFileFolderName + "/" + archetype.layoutFolderName);
+        HashMap<String, LevelGenerationFileCollection> temp = new HashMap<>();
 
+        // create collection
         for (FileWrapper wrapper : loadedFiles){
-            target.add(new RoomContents(Utils.parseCsv(wrapper.getContents(), ",")));
+            //target.add(new RoomContents(Utils.parseCsv(wrapper.getContents(), ",")));
+            String targetName = wrapper.getFileName().substring(0, wrapper.getFileName().lastIndexOf("_") - 1);
+
+            if (!temp.containsKey(targetName)){
+                temp.put(targetName, new LevelGenerationFileCollection());
+            }
+            if (wrapper.getFileName().endsWith("tiles")){
+                temp.get(targetName).layoutFile = wrapper;
+            }else if (wrapper.getFileName().endsWith("objects")){
+                temp.get(targetName).entityFile = wrapper;
+            }
+        }
+
+        // create rooms from loaded files
+        for (LevelGenerationFileCollection collection : temp.values()){
+            target.add(collection.initializeRoomContents());
         }
     }
 
     public TowerRoom getRoom(FloorLevel level, RoomArchetype archetype){
         ArrayList<RoomContents> possibleLayout = levelLayoutMap.get(level).get(archetype);
         return new TowerRoom(possibleLayout.get(Utils.getRandomInRange(0, possibleLayout.size() - 1)), RoomArchetype.NORMAL);
+    }
+
+    private static class LevelGenerationFileCollection{
+        public FileWrapper layoutFile = null;
+        public FileWrapper entityFile = null;
+
+        private LevelGenerationFileCollection(){
+            // private constructor
+        }
+        public RoomContents initializeRoomContents(){
+            try {
+                return new RoomContents(Utils.parseCsv(layoutFile.getContents(), ","), Utils.parseCsv(entityFile.getContents(), ","));
+            }catch (Exception e){
+                DebugUtils.fatalCrash("Level loading failed " + e.getMessage());
+            }
+            return null;
+        }
+
     }
 
 }
