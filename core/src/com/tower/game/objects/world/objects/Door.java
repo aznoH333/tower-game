@@ -23,13 +23,14 @@ public class Door extends WorldObject {
             default:
             case UP:    sprite = "door_up";     offsetX = -6;   offsetY = 0; break;
             case DOWN:  sprite = "door_down";   offsetX = -6;   offsetY = -6; break;
-            case LEFT:  sprite = "door_left";   offsetX = -6;    offsetY = -6; break;
+            case LEFT:  sprite = "door_left";   offsetX = -6;   offsetY = -6; break;
             case RIGHT: sprite = "door_right";  offsetX = 0;    offsetY = -6; break;
         }
     }
     @Override
     public void update(float cameraOffsetX, float cameraOffsetY) {
         Drawing.getInstance().drawTexture(sprite, new Vector2(x + offsetX - cameraOffsetX, y + offsetY - cameraOffsetY), DrawingLayers.WORLD_OBJECTS);
+
     }
 
     @Override
