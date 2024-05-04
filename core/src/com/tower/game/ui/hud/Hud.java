@@ -31,10 +31,10 @@ public class Hud {
 
 
         for (int i = 0; i < 20; i++){
-            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth, i * GameConstants.TILE_SIZE), FlipDirection.VERTICAL, DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
+            drawing.drawTexture("side_bar_1", new Vector2(gutterWidth - 16, i * GameConstants.TILE_SIZE), FlipDirection.VERTICAL, DrawingLayers.WALLS, WorldViewportType.HUD_LEFT);
         }
 
-        for (int i = 0; i < Math.ceil(gutterWidth / GameConstants.TILE_SIZE); i++){
+        for (int i = 0; i < Math.ceil(gutterWidth / GameConstants.TILE_SIZE) - 1; i++){
             for (int j = 0; j < GameConstants.TILES_IN_ROOM; j++){
                 drawing.drawTexture("side_bar_2", new Vector2(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE), FlipDirection.NONE, DrawingLayers.FLOOR, WorldViewportType.HUD_LEFT);
             }
