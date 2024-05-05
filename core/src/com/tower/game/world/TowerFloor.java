@@ -11,6 +11,7 @@ import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
 import com.tower.game.world.enums.FloorLevel;
 import com.tower.game.world.enums.RoomArchetype;
+import com.tower.game.world.enums.WorldDirection;
 import com.tower.game.world.enums.WorldTile;
 
 import java.util.HashMap;
@@ -181,5 +182,26 @@ public class TowerFloor {
      */
     public boolean checkIfRoomExists(int x, int y){
         return rooms.containsKey(new FloorCoordinates(currentCoordinates.getX() + x, currentCoordinates.getY() + y));
+    }
+
+    /**
+     * get the distance to the closest wall
+     * @param x starting x
+     * @param y starting y
+     * @param direction search direction
+     * @return distance to the closest wall in specified direction (ignores objects)
+     */
+    public int findDistanceToNextWall(int x, int y, WorldDirection direction){
+        int result = 0;
+        int searchX = x;
+        int searchY = y;
+        TowerRoom currentRoom = getCurrentRoom();
+        while (!currentRoom.isTileWall(searchX, searchY)){
+            searchX += direction.x;
+            searchY += direction.y;
+            result++;
+        }
+        result--;
+        return result;
     }
 }

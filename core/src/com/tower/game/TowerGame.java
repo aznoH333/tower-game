@@ -3,11 +3,14 @@ package com.tower.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
+import com.tower.game.objects.entites.ObjectBody;
 import com.tower.game.objects.world.WorldObjectManager;
 import com.tower.game.ui.hud.Hud;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.world.World;
+import com.tower.game.world.enums.WorldDirection;
 
 public class TowerGame extends ApplicationAdapter {
 
@@ -20,14 +23,14 @@ public class TowerGame extends ApplicationAdapter {
 		Hud.getInstance();
 		World.getInstance().getCurrentFloor().init();
 	}
-
+	ObjectBody player = new ObjectBody(new Vector2(128, 128), WorldDirection.UP);
 	@Override
 	public void render () {
 		WorldObjectManager.getInstance().update();
 		World.getInstance().render();
 		Drawing.getInstance().renderUpdate();
 		Hud.getInstance().update();
-
+		player.update();
 		// temporary input
 		if (Gdx.input.isKeyJustPressed(Input.Keys.S)){
 			World.getInstance().getCurrentFloor().moveCoordinatesBy(0, -1);
@@ -40,6 +43,18 @@ public class TowerGame extends ApplicationAdapter {
 		}
 		if (Gdx.input.isKeyJustPressed(Input.Keys.D)){
 			World.getInstance().getCurrentFloor().moveCoordinatesBy(1, 0);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
+			player.move(WorldDirection.UP, 2, 10);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
+			player.move(WorldDirection.DOWN, 2, 10);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+			player.move(WorldDirection.LEFT, 2, 10);
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+			player.move(WorldDirection.RIGHT, 2, 10);
 		}
 		DebugUtils.checkFps();
 		// kill app if escape is pressed

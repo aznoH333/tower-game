@@ -1,5 +1,7 @@
 package com.tower.game.utils;
 
+import com.badlogic.gdx.Game;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,5 +64,16 @@ public class Utils {
     public static float lerp(float start, float end, float value){
         return ((end - start) * value) + start;
     }
+
+    /**
+     * 1 world unit = 16 screen units
+     * @param screenUnits amount to convert
+     * @return result
+     */
+    public static int convertWorldToTile(float screenUnits){
+        return (int)(screenUnits / GameConstants.TILE_SIZE);
+    }
+
+
 
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WorldViewport {
-    private final HashMap<DrawingLayers, HashMap<Integer, ArrayList<RenderData>>> drawingQueue;
+    private final HashMap<Integer, HashMap<Integer, ArrayList<RenderData>>> drawingQueue;
     private final Viewport viewport;
 
     public WorldViewport(Viewport viewport) {
@@ -14,7 +14,7 @@ public class WorldViewport {
         this.viewport = viewport;
     }
 
-    public HashMap<DrawingLayers, HashMap<Integer, ArrayList<RenderData>>> getDrawingQueue() {
+    public HashMap<Integer, HashMap<Integer, ArrayList<RenderData>>> getDrawingQueue() {
         return drawingQueue;
     }
 
@@ -25,7 +25,7 @@ public class WorldViewport {
 
     public void setupDrawingQueue(){
         for (DrawingLayers layer : DrawingLayers.values()){
-            drawingQueue.put(layer, new HashMap<>());
+            drawingQueue.put(layer.index, new HashMap<>());
         }
     }
 }

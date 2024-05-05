@@ -1,5 +1,7 @@
 package com.tower.game.world;
 
+import com.tower.game.world.enums.WorldDirection;
+
 public class World {
     private static World instance;
     public static World getInstance(){
@@ -17,5 +19,8 @@ public class World {
         return currentFloor;
     }
 
+    public int getMaxPossibleMoveDistance(int x, int y, WorldDirection direction){
+        return currentFloor.findDistanceToNextWall(x, y, direction);
+    }
 
 }

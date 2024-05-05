@@ -78,4 +78,8 @@ public class TowerRoom {
     public boolean isEntered(){
         return entered;
     }
+
+    public boolean isTileWall(int x, int y){
+        return roomContents.tiles[x][y].isWall;
+    }
 }

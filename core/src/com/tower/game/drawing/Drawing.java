@@ -189,7 +189,7 @@ public class Drawing {
      * @param viewportType to which viewport should sprite be drawn (default = game)
      */
     public void drawTexture(String textureName, Vector2 position, FlipDirection flip, float rotation, float scale, Color color, DrawingLayers layer, int priority, WorldViewportType viewportType){
-        HashMap<Integer, ArrayList<RenderData>> layerQueue = viewports.get(viewportType.index).getDrawingQueue().get(layer);
+        HashMap<Integer, ArrayList<RenderData>> layerQueue = viewports.get(viewportType.index).getDrawingQueue().get(layer.index);
         if (!layerQueue.containsKey(priority)){
             layerQueue.put(priority, new ArrayList<>());
         }
