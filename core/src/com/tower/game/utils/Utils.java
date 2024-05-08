@@ -54,12 +54,7 @@ public class Utils {
         return (int)(Math.random() * ((max + 1) - min)) + min;
     }
 
-    public static float smoothStep(float value){
-        float x = value * value;
-        float y = 1 - ((1 - value) * (1 - value));
 
-        return lerp(x, y, value);
-    }
 
     public static float lerp(float start, float end, float value){
         return ((end - start) * value) + start;

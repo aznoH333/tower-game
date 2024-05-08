@@ -1,9 +1,6 @@
-package com.tower.game.objects.entites;
+package com.tower.game.objects.objectBody;
 
 import com.badlogic.gdx.math.Vector2;
-import com.tower.game.drawing.Drawing;
-import com.tower.game.drawing.DrawingLayers;
-import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
@@ -14,14 +11,18 @@ public class ObjectBody {
 
     private Vector2 position;
     private WorldDirection direction;
-    private final String sprite = "player"; // TODO : this
+    private final ObjectAnimator animator;
     private final UniversalTimer moveTimer = new UniversalTimer(10); // TODO : this
     private Vector2 moveStartPosition;
     private Vector2 moveTargetPosition;
     private boolean isMoving = false;
-    public ObjectBody(Vector2 position, WorldDirection direction){
+    private final boolean alternateMoveAnimations = true;
+    private int moveCounter = 0;
+    private MoveAnimationFunction moveAnimationFunction = MoveAnimationFunction.LOG;
+    public ObjectBody(Vector2 position, WorldDirection direction, ObjectAnimator animator){
         this.position = position;
         this.direction = direction;
+        this.animator = animator;
     }
 
     public void update(){
@@ -30,7 +31,7 @@ public class ObjectBody {
     }
 
     private void draw(){
-        Drawing.getInstance().drawTexture(sprite, position, DrawingLayers.OBJECTS);
+        animator.update(position);
     }
 
     public void move(WorldDirection direction, int tileAmount, int timePerTile){
@@ -41,26 +42,37 @@ public class ObjectBody {
                 Utils.convertWorldToTile(position.x),
                 Utils.convertWorldToTile(position.y), direction), tileAmount);
 
-        DebugUtils.debugMessage(targetDistance + "");
         if (targetDistance <= 0){
             return;
         }
         moveTimer.setMaxValue(timePerTile * targetDistance);
-        DebugUtils.debugMessage(moveTimer.getMaxValue() + "");
 
         this.direction = direction;
+        animator.setCurrentDirection(direction);
+
+        // play animation
+        {
+            ObjectAnimationType type;
+            if (alternateMoveAnimations && moveCounter % 2 == 0){
+                type = ObjectAnimationType.MOVE_2;
+            }else{
+                type = ObjectAnimationType.MOVE_1;
+            }
+            animator.playAnimation(type, timePerTile * targetDistance);
+        }
         moveTimer.reset();
         moveStartPosition = new Vector2(position.x, position.y);
         moveTargetPosition = new Vector2(position.x + (GameConstants.TILE_SIZE * direction.x * targetDistance), position.y + (GameConstants.TILE_SIZE * direction.y * targetDistance));
         isMoving = true;
+        moveCounter++;
     }
 
     private void updateMovement(){
         moveTimer.progress();
 
         if (!moveTimer.isReady()) { // move animation
-            position.x = moveStartPosition.x + (Utils.smoothStep(moveTimer.getAsPercentage()) * (moveTargetPosition.x - moveStartPosition.x));
-            position.y = moveStartPosition.y + (Utils.smoothStep(moveTimer.getAsPercentage()) * (moveTargetPosition.y - moveStartPosition.y));
+            position.x = moveStartPosition.x + (moveAnimationFunction.animation.animation(moveTimer.getAsPercentage()) * (moveTargetPosition.x - moveStartPosition.x));
+            position.y = moveStartPosition.y + (moveAnimationFunction.animation.animation(moveTimer.getAsPercentage()) * (moveTargetPosition.y - moveStartPosition.y));
 
         } else if (isMoving){ // snap to tile
             position = moveTargetPosition;

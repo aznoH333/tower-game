@@ -5,10 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
 import com.tower.game.objects.world.WorldObjectManager;
-import com.tower.game.utils.DebugUtils;
-import com.tower.game.utils.GameConstants;
-import com.tower.game.utils.UniversalTimer;
-import com.tower.game.utils.Utils;
+import com.tower.game.utils.*;
 import com.tower.game.world.enums.FloorLevel;
 import com.tower.game.world.enums.RoomArchetype;
 import com.tower.game.world.enums.WorldDirection;
@@ -105,8 +102,8 @@ public class TowerFloor {
             drawFakeBackground(fakeBackgroundX - GameConstants.ROOM_SIZE * transitionX, fakeBackgroundY - GameConstants.ROOM_SIZE * transitionY);
 
             // transition is happening
-            cameraOffsetX = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionX * GameConstants.ROOM_SIZE * 2;
-            cameraOffsetY = Utils.smoothStep(transitionTimer.getAsPercentage()) * transitionY * GameConstants.ROOM_SIZE * 2;
+            cameraOffsetX = InterpolationFunctions.smoothStep(transitionTimer.getAsPercentage()) * transitionX * GameConstants.ROOM_SIZE * 2;
+            cameraOffsetY = InterpolationFunctions.smoothStep(transitionTimer.getAsPercentage()) * transitionY * GameConstants.ROOM_SIZE * 2;
             fakeBackgroundX = cameraOffsetX;
             fakeBackgroundY = cameraOffsetY;
 
