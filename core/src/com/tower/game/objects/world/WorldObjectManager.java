@@ -1,15 +1,19 @@
 package com.tower.game.objects.world;
 
+import com.badlogic.gdx.math.Vector2;
 import com.tower.game.objects.world.objects.Door;
+import com.tower.game.objects.world.objects.Player;
 import com.tower.game.utils.DebugUtils;
 import com.tower.game.world.TowerFloor;
 import com.tower.game.world.World;
 import com.tower.game.world.enums.WorldDirection;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class WorldObjectManager {
     private static WorldObjectManager instance;
+    private Vector2 playerSpawnLocation = new Vector2(0,0);
     public static WorldObjectManager getInstance(){
         if (instance == null) instance = new WorldObjectManager();
         return instance;
@@ -28,12 +32,17 @@ public class WorldObjectManager {
     }
 
     public void onRoomEntry(boolean firstEntry){
+        playerSpawnLocation = new Vector2(0,0);
+
         for (WorldObject o : worldObjects){
-            o.onFirstRoomEntry();
+
+            o.onRoomEnter();
             if (firstEntry){
                 o.onFirstRoomEntry();
             }
         }
+        // spawn player
+        addObject(new Player(playerSpawnLocation, World.getInstance().getCurrentFloor().getLastMoveDirection()));
     }
 
     public void update(){
@@ -55,5 +64,13 @@ public class WorldObjectManager {
             case GENERIC_ENEMY_SPAWN: DebugUtils.warn("Warning enemy spawners not implemented! \n x = " + x + ", y = " + y);return;
         }
         DebugUtils.fatalCrash("Unknown object id : " + id);
+    }
+
+    public Vector2 getPlayerSpawnLocation() {
+        return playerSpawnLocation;
+    }
+
+    public void setPlayerSpawnLocation(Vector2 playerSpawnLocation) {
+        this.playerSpawnLocation = playerSpawnLocation;
     }
 }

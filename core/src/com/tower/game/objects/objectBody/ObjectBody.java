@@ -1,15 +1,15 @@
 package com.tower.game.objects.objectBody;
 
 import com.badlogic.gdx.math.Vector2;
+import com.tower.game.objects.entites.Entity;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
 import com.tower.game.world.World;
 import com.tower.game.world.enums.WorldDirection;
 
-public class ObjectBody {
+public class ObjectBody extends Entity {
 
-    private Vector2 position;
     private WorldDirection direction;
     private final ObjectAnimator animator;
     private final UniversalTimer moveTimer = new UniversalTimer(10); // TODO : this
@@ -23,6 +23,8 @@ public class ObjectBody {
         this.position = position;
         this.direction = direction;
         this.animator = animator;
+        this.size = new Vector2(16.0f, 16.0f);
+        animator.setCurrentDirection(direction);
     }
 
     public void update(){
@@ -48,7 +50,7 @@ public class ObjectBody {
         moveTimer.setMaxValue(timePerTile * targetDistance);
 
         this.direction = direction;
-        animator.setCurrentDirection(direction);
+        animator.setCurrentDirection(this.direction);
 
         // play animation
         {

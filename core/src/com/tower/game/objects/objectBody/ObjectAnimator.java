@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
 import com.tower.game.utils.DebugUtils;
+import com.tower.game.world.World;
 import com.tower.game.world.enums.WorldDirection;
 
 import java.util.HashMap;
@@ -37,7 +38,10 @@ public class ObjectAnimator {
 
     public void update(Vector2 position){
         currentAnimation.update();
-        Drawing.getInstance().drawTexture(currentAnimation.getCurrentSprite(), new Vector2(position.x + currentAnimation.getXOffset(), position.y + currentAnimation.getYOffset()), DrawingLayers.OBJECTS);
+        float cameraXOffset = World.getInstance().getCurrentFloor().getCameraOffsetX();
+        float cameraYOffset = World.getInstance().getCurrentFloor().getCameraOffsetY();
+
+        Drawing.getInstance().drawTexture(currentAnimation.getCurrentSprite(), new Vector2(position.x + currentAnimation.getXOffset() - cameraXOffset, position.y + currentAnimation.getYOffset() - cameraYOffset), DrawingLayers.OBJECTS);
     }
 
 

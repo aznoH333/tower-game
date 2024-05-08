@@ -13,4 +13,8 @@ public enum WorldDirection {
         this.x = x;
         this.y = y;
     }
+
+    public boolean isOppositeTo(WorldDirection otherDirection){
+        return this.x == otherDirection.x * -1 && this.y == otherDirection.y * -1;
+    }
 }

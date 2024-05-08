@@ -5,6 +5,9 @@ import com.tower.game.drawing.Drawing;
 import com.tower.game.drawing.DrawingLayers;
 import com.tower.game.objects.entites.Entity;
 import com.tower.game.objects.world.WorldObject;
+import com.tower.game.objects.world.WorldObjectManager;
+import com.tower.game.utils.DebugUtils;
+import com.tower.game.utils.GameConstants;
 import com.tower.game.world.World;
 import com.tower.game.world.enums.WorldDirection;
 
@@ -26,6 +29,7 @@ public class Door extends WorldObject {
             case LEFT:  sprite = "door_left";   offsetX = -6;   offsetY = -6; break;
             case RIGHT: sprite = "door_right";  offsetX = 0;    offsetY = -6; break;
         }
+
     }
     @Override
     public void update(float cameraOffsetX, float cameraOffsetY) {
@@ -40,7 +44,11 @@ public class Door extends WorldObject {
 
     @Override
     public void onRoomEnter() {
+        WorldDirection worldDirection = World.getInstance().getCurrentFloor().getLastMoveDirection();
 
+        if (direction.isOppositeTo(worldDirection)){
+            WorldObjectManager.getInstance().setPlayerSpawnLocation(new Vector2(x + (worldDirection.x * GameConstants.TILE_SIZE), y + (worldDirection.y * GameConstants.TILE_SIZE)));
+        }
     }
 
     @Override

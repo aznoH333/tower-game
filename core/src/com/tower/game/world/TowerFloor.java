@@ -27,6 +27,8 @@ public class TowerFloor {
     private float fakeBackgroundY = 0.0f;
     private boolean repeatedRoomEntryFlag = false;
     private boolean hasBeenInitialized = false;
+    private WorldDirection lastMoveDirection = WorldDirection.UP;
+
 
     public TowerFloor(){
         // temporary floor generation
@@ -59,22 +61,26 @@ public class TowerFloor {
 
     /**
      * Moves position in floor
-     * @param x adds to current x
-     * @param y adds to current y
+     * @param direction = direction to move in
      */
-    public void moveCoordinatesBy(int x, int y){
+    public void moveInDirection(WorldDirection direction){
 
         if (!transitionTimer.isReady()){
             return;
         }
 
-        FloorCoordinates target = new FloorCoordinates(currentCoordinates.getX() + x, currentCoordinates.getY() + y);
+        FloorCoordinates target = new FloorCoordinates(currentCoordinates.getX() + direction.x, currentCoordinates.getY() + direction.y);
         if (rooms.containsKey(target)){
             DebugUtils.info("Entering room : " + target.getX() +" , " + target.getY());
-            transitionAnimation(x, y);
+            transitionAnimation(direction.x, direction.y);
+            this.lastMoveDirection = direction;
         }else {
             DebugUtils.warn("Attempted to enter non existant floor space : " + target.getX() +" , " + target.getY());
         }
+    }
+
+    public WorldDirection getLastMoveDirection(){
+        return lastMoveDirection;
     }
 
     /**
