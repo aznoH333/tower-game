@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.objects.entites.AnimatorFactory;
 import com.tower.game.objects.entites.Entity;
+import com.tower.game.objects.objectBody.MoveAnimationFunction;
 import com.tower.game.objects.objectBody.ObjectBody;
 import com.tower.game.objects.world.WorldObject;
 import com.tower.game.utils.DebugUtils;
@@ -16,7 +17,7 @@ public class Player extends WorldObject {
 
     public Player(Vector2 position, WorldDirection direction){
         DebugUtils.debugMessage("spawned at : " + position.x + ", " + position.y);
-        this.playerBody = new ObjectBody(position, direction, AnimatorFactory.getAnimatorForPlayer());
+        this.playerBody = new ObjectBody(position, direction, AnimatorFactory.getAnimatorForPlayer()).allowInteraction().setMoveSpeed(10).changeMovementAnimationFunction(MoveAnimationFunction.SQRT);
     }
     @Override
     public void update(float cameraOffsetX, float cameraOffsetY) {
@@ -24,16 +25,16 @@ public class Player extends WorldObject {
 
         // movement
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)){
-            playerBody.move(WorldDirection.UP, 1, 15);
+            playerBody.move(WorldDirection.UP);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)){
-            playerBody.move(WorldDirection.DOWN, 1, 15);
+            playerBody.move(WorldDirection.DOWN);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-            playerBody.move(WorldDirection.LEFT, 1, 15);
+            playerBody.move(WorldDirection.LEFT);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-            playerBody.move(WorldDirection.RIGHT, 1, 15);
+            playerBody.move(WorldDirection.RIGHT);
         }
     }
 
@@ -55,5 +56,10 @@ public class Player extends WorldObject {
     @Override
     public boolean canExist() {
         return true;
+    }
+
+    @Override
+    public boolean canBeInteracted() {
+        return false;
     }
 }

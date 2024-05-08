@@ -5,7 +5,8 @@ import com.tower.game.utils.Utils;
 
 public enum MoveAnimationFunction {
     SMOOTH_STEP(InterpolationFunctions::smoothStep),
-    LOG(InterpolationFunctions::sqrt);
+    SQRT(InterpolationFunctions::sqrt),
+    LINEAR(InterpolationFunctions::linear);
 
     public final TransitionAnimation animation;
 

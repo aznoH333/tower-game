@@ -29,6 +29,7 @@ public class Door extends WorldObject {
             case LEFT:  sprite = "door_left";   offsetX = -6;   offsetY = -6; break;
             case RIGHT: sprite = "door_right";  offsetX = 0;    offsetY = -6; break;
         }
+        this.blocksMovement = true;
 
     }
     @Override
@@ -39,7 +40,7 @@ public class Door extends WorldObject {
 
     @Override
     public void onInteract(Entity other) {
-
+        World.getInstance().getCurrentFloor().moveInDirection(direction);
     }
 
     @Override
@@ -59,5 +60,10 @@ public class Door extends WorldObject {
     @Override
     public boolean canExist() {
         return World.getInstance().getCurrentFloor().checkIfRoomExists(direction.x, direction.y);
+    }
+
+    @Override
+    public boolean canBeInteracted() {
+        return true;
     }
 }

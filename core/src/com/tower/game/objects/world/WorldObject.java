@@ -1,6 +1,8 @@
 package com.tower.game.objects.world;
 
 import com.tower.game.objects.entites.Entity;
+import com.tower.game.utils.Utils;
+import jdk.internal.classfile.impl.Util;
 
 /**
  * World objects are static entities with simplified world interaction
@@ -10,6 +12,7 @@ import com.tower.game.objects.entites.Entity;
 public abstract class WorldObject {
     protected int x;
     protected int y;
+    protected boolean blocksMovement = false;
     private ObjectType type;
     public ObjectType getType(){
         return type;
@@ -24,6 +27,13 @@ public abstract class WorldObject {
     public int getY() {
         return y;
     }
+    public int getInWorldX(){
+        return Utils.convertWorldToTile(x);
+    }
+
+    public int getInWorldY(){
+        return Utils.convertWorldToTile(y);
+    }
 
     /**
      * Should be used to determine whether object should spawn.
@@ -32,5 +42,7 @@ public abstract class WorldObject {
      * @return true = yes, false = no
      */
     public abstract boolean canExist();
+
+    public abstract boolean canBeInteracted();
 
 }

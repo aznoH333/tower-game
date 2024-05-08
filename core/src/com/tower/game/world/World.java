@@ -1,5 +1,8 @@
 package com.tower.game.world;
 
+import com.tower.game.objects.world.WorldObjectManager;
+import com.tower.game.objects.world.WorldSearchResult;
+import com.tower.game.utils.DebugUtils;
 import com.tower.game.world.enums.WorldDirection;
 
 public class World {
@@ -19,8 +22,11 @@ public class World {
         return currentFloor;
     }
 
-    public int getMaxPossibleMoveDistance(int x, int y, WorldDirection direction){
-        return currentFloor.findDistanceToNextWall(x, y, direction);
+    public WorldSearchResult getMaxPossibleMoveDistance(int x, int y, WorldDirection direction){
+        int tileSearchResult = currentFloor.findDistanceToNextWall(x, y, direction);
+        int objectSearchResult = WorldObjectManager.getInstance().getMaxPossibleMoveDistance(x, y, direction);
+
+        return new WorldSearchResult(Math.min(tileSearchResult, objectSearchResult), objectSearchResult <= tileSearchResult);
     }
 
 }

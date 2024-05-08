@@ -2,6 +2,9 @@ package com.tower.game.objects.objectBody;
 
 import com.badlogic.gdx.math.Vector2;
 import com.tower.game.objects.entites.Entity;
+import com.tower.game.objects.world.WorldObjectManager;
+import com.tower.game.objects.world.WorldSearchResult;
+import com.tower.game.utils.DebugUtils;
 import com.tower.game.utils.GameConstants;
 import com.tower.game.utils.UniversalTimer;
 import com.tower.game.utils.Utils;
@@ -18,7 +21,9 @@ public class ObjectBody extends Entity {
     private boolean isMoving = false;
     private final boolean alternateMoveAnimations = true;
     private int moveCounter = 0;
-    private MoveAnimationFunction moveAnimationFunction = MoveAnimationFunction.LOG;
+    public boolean canInteract = false;
+    private int moveSpeed = 10;
+    private MoveAnimationFunction moveAnimationFunction = MoveAnimationFunction.SMOOTH_STEP;
     public ObjectBody(Vector2 position, WorldDirection direction, ObjectAnimator animator){
         this.position = position;
         this.direction = direction;
@@ -40,11 +45,18 @@ public class ObjectBody extends Entity {
         if (!moveTimer.isReady()){
             return;
         }
-        int targetDistance = Math.min(World.getInstance().getMaxPossibleMoveDistance(
-                Utils.convertWorldToTile(position.x),
-                Utils.convertWorldToTile(position.y), direction), tileAmount);
+        int tileX = Utils.convertWorldToTile(position.x);
+        int tileY = Utils.convertWorldToTile(position.y);
+        WorldSearchResult result = World.getInstance().getMaxPossibleMoveDistance(tileX, tileY, direction);
+        int targetDistance = Math.min(result.maxAvailableDistance, tileAmount);
 
         if (targetDistance <= 0){
+            // interact with objects
+            if (result.isObject && canInteract){
+                DebugUtils.debugMessage("interacting with object", true);
+                WorldObjectManager.getInstance().interactWithObject(this,tileX + (direction.x), tileY + (direction.y));
+            }
+
             return;
         }
         moveTimer.setMaxValue(timePerTile * targetDistance);
@@ -62,11 +74,16 @@ public class ObjectBody extends Entity {
             }
             animator.playAnimation(type, timePerTile * targetDistance);
         }
+
         moveTimer.reset();
         moveStartPosition = new Vector2(position.x, position.y);
         moveTargetPosition = new Vector2(position.x + (GameConstants.TILE_SIZE * direction.x * targetDistance), position.y + (GameConstants.TILE_SIZE * direction.y * targetDistance));
         isMoving = true;
         moveCounter++;
+    }
+
+    public void move(WorldDirection direction){
+        move(direction, 1, moveSpeed);
     }
 
     private void updateMovement(){
@@ -80,5 +97,22 @@ public class ObjectBody extends Entity {
             position = moveTargetPosition;
             isMoving = false;
         }
+    }
+
+
+    // chain setter functions
+    public ObjectBody setMoveSpeed(int speed){
+        this.moveSpeed = speed;
+        return this;
+    }
+
+    public ObjectBody allowInteraction(){
+        canInteract = true;
+        return this;
+    }
+
+    public ObjectBody changeMovementAnimationFunction(MoveAnimationFunction function){
+        this.moveAnimationFunction = function;
+        return this;
     }
 }

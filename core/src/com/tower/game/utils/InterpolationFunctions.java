@@ -9,7 +9,10 @@ public class InterpolationFunctions {
     }
 
     public static float sqrt(float value){
-
         return (float) Math.pow(value, 0.5f);
+    }
+
+    public static float linear(float value){
+        return value; // wow you got the tetris. you are the beeest. woow tetris yeahhhh
     }
 }
